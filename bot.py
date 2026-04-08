@@ -49,7 +49,7 @@ class TimezoneSelect(discord.ui.Select):
         set_user_tz(interaction.user.id, tz_str)
         tz = pytz.timezone(tz_str)
 
-        timestamps = [to_unix_timestamp(h, m, inline_tz or tz) for h, m, inline_tz in self.times]
+        timestamps = [to_unix_timestamp(h, m, inline_tz or tz, target_date=d) for h, m, d, inline_tz in self.times]
         reply = _format_reply(timestamps)
 
         await interaction.response.edit_message(
@@ -93,12 +93,11 @@ async def on_message(message: discord.Message):
     if message.author.bot:
         return
 
-    times = find_times(message.content)
+    tz = get_user_tz(message.author.id)
+    times = find_times(message.content, ref_tz=tz)
     if not times:
         await bot.process_commands(message)
         return
-
-    tz = get_user_tz(message.author.id)
 
     if tz is None:
         view = TimezoneView(message, times)
@@ -108,7 +107,7 @@ async def on_message(message: discord.Message):
         )
         return
 
-    timestamps = [to_unix_timestamp(h, m, inline_tz or tz) for h, m, inline_tz in times]
+    timestamps = [to_unix_timestamp(h, m, inline_tz or tz, target_date=d) for h, m, d, inline_tz in times]
     await message.reply(_format_reply(timestamps))
 
     await bot.process_commands(message)
