@@ -1,0 +1,5 @@
+discord.py>=2.3.0
+pytz
+python-dateutil
+python-dotenv
+psycopg2-binary
