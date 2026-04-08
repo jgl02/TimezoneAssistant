@@ -83,6 +83,9 @@ tree = bot.tree
 
 @bot.event
 async def on_ready():
+    import os
+    db_url = os.getenv("DATABASE_URL")
+    print(f"DATABASE_URL set: {bool(db_url)} — value starts with: {db_url[:20] if db_url else 'NOT SET'}")
     init_db()
     await tree.sync()
     print(f"Logged in as {bot.user} (ID: {bot.user.id})")
