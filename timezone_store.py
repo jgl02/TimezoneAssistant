@@ -3,15 +3,11 @@ import psycopg2
 import psycopg2.extras
 import pytz
 
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+
 def _get_conn():
-    # Railway private networking: use individual params to avoid DNS issues with internal URLs
-    return psycopg2.connect(
-        host=os.getenv("PGHOST", "postgres"),
-        port=os.getenv("PGPORT", "5432"),
-        dbname=os.getenv("PGDATABASE", "railway"),
-        user=os.getenv("PGUSER", "postgres"),
-        password=os.getenv("PGPASSWORD"),
-    )
+    return psycopg2.connect(DATABASE_URL)
 
 
 def init_db() -> None:
