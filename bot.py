@@ -105,7 +105,6 @@ async def on_message(message: discord.Message):
         await message.reply(
             "What's your timezone? I'll remember it so you only need to do this once.",
             view=view,
-            ephemeral=False,
         )
         return
 
