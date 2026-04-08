@@ -3,11 +3,16 @@ import psycopg2
 import psycopg2.extras
 import pytz
 
-DATABASE_URL = os.getenv("DATABASE_URL")
-
-
 def _get_conn():
-    return psycopg2.connect(DATABASE_URL)
+    import urllib.parse
+    url = os.getenv("DATABASE_URL", "")
+    # Railway's internal DNS for .railway.internal can fail; use the short hostname instead
+    parsed = urllib.parse.urlparse(url)
+    if parsed.hostname and parsed.hostname.endswith(".railway.internal"):
+        # Replace e.g. "postgres.railway.internal" with just "postgres"
+        short_host = parsed.hostname.split(".")[0]
+        url = url.replace(parsed.hostname, short_host)
+    return psycopg2.connect(url)
 
 
 def init_db() -> None:
