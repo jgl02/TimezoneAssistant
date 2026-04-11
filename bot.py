@@ -67,10 +67,10 @@ class TimezoneView(discord.ui.View):
 def _format_reply(timestamps: list[int]) -> str:
     if len(timestamps) == 1:
         ts = timestamps[0]
-        return f"🕐 <t:{ts}:t> — <t:{ts}:F> (<t:{ts}:R>)"
+        return f"🕐 <t:{ts}:t> (<t:{ts}:R>)"
     lines = [f"🕐 Times mentioned:"]
     for ts in timestamps:
-        lines.append(f"• <t:{ts}:t> — <t:{ts}:F> (<t:{ts}:R>)")
+        lines.append(f"• <t:{ts}:t> (<t:{ts}:R>)")
     return "\n".join(lines)
 
 
